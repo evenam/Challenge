@@ -1,0 +1,9 @@
+If word A is a friend of word B, then word B is a friend of word A.
+If word A is a friend of word B via change in letter at position n, and if word B is a friend of word C via change in letter at position n, then word C is a friend of word A.
+If word A is a friend of word B via removed letter at position n, and if word C is a friend of word A via changed letter at position n, then word C is a friend of word B. 
+If word A is a friend of word B via added letter at position n,  and if word C is a friend of word B via changed letter at position n, then word A is a friend of word C. 
+If the length of word A is greator than +1 of the length of word B, then word A and word B cannot be friends.
+If the length of word A is less than -1 of the length of word B, then word A and word B cannot be friends. 
+If word A is a friend of word B via removal at position n, then each letter in word B must be contained in word A.
+If word A is a friend of word B via addition at position n, then each letter in word A must be contained in word B.
+If word A is a friend of word B via change at position n, then each letter in word A must be contained in word B except the letter at position n. 
