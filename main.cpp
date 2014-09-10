@@ -1,11 +1,11 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <cstdlib>
+#include <algorithm>
 #include <iostream>
 
 std::vector<std::string> wordList;
-int wordCompare(std::string word1, std::string word2);
+bool wordCompare(std::string word1, std::string word2);
 
 int main(int argc, char** argv)
 {
@@ -15,18 +15,19 @@ int main(int argc, char** argv)
 	while (infile >> inputWord)
 		wordList.push_back(inputWord);
 
-	std::sort(&wordList, wordList.size(), sizeof(std::string), wordCompare);
+	std::sort(wordList.begin(), wordList.end(), wordCompare);
 
 	for (std::vector<std::string>::iterator i = wordList.begin(); i != wordList.end(); i ++)
 		std::cout << (*i) << std::endl;
 
-	std::cin.get();
 	return 0;
 }
 
-int wordCompare(std::string word1, std::string word2)
+bool wordCompare(std::string word1, std::string word2)
 {
 	if (word1.size() < word2.size()) return true;
 	if (word2.size() < word1.size()) return false;
-	return (word1.compare(word2));
+	std::reverse(word1.begin(), word1.end());
+	std::reverse(word2.begin(), word2.end());
+	return (word1 < word2);
 }
