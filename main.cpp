@@ -4,36 +4,38 @@
 #include <algorithm>
 #include <iostream>
 
+// social network graph
+struct WordNode
+{
+	std::string word;
+	std::vector<WordNode*> friends;
+};
+
+// enough parenthesis to keep basic expression safe
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
-std::vector<std::string> wordList;
 bool wordCompare(std::string word1, std::string word2);
 bool friends(std::string word1, std::string word2);
+WordNode* socialize(std::string word);
+void print();
+
+// globals
+WordNode* socialNetwork;
+std::vector<std::string> wordList;
+std::vector<WordNode*> networkGraph;
 
 int main(int argc, char** argv)
 {
 	std::ifstream infile;
-	//std::string inputWord;
-	std::string iWord1, iWord2;
+	std::string inputWord;
 	infile.open("randomlist.txt");
-	//while (infile >> inputWord)
-	//	wordList.push_back(inputWord);
+	while (infile >> inputWord)
+		wordList.push_back(inputWord);
 
-	//std::sort(wordList.begin(), wordList.end(), wordCompare);
-
-	//for (auto i = wordList.begin(); i != wordList.end(); i ++)
-	//	std::cout << (*i) << std::endl;
-	std::cin >> iWord1;
-	while (iWord1 != "exit")
-	{
-		std::cin >> iWord2;
-		if (friends(iWord1, iWord2))
-			std::cout << "FRIENDS!\n";
-		else
-			std::cout << "ENEMIES!\n";
-			
-		std::cin >> iWord1;
-	}
+	std::sort(wordList.begin(), wordList.end(), wordCompare);
+	std::cin >> inputWord;
+	socialNetwork = socialize(inputWord);
+	print();
 
 	return 0;
 }
@@ -58,8 +60,6 @@ bool friends(std::string word1, std::string word2)
 		tw2 = word2;
 		tw1.erase(i, 1);
 		tw2.erase(i, 1);
-		std::cout << "TESTING:\t" << word1 << "\t" << word2 << "\n\t\t" 
-			<< tw1 << "\t" << tw2 << "\n";
 		if (word1 == tw2)
 			return true;
 		if (word2 == tw1)
@@ -69,4 +69,42 @@ bool friends(std::string word1, std::string word2)
 	}
 	
 	return false;
+}
+
+// build social network graph
+WordNode* socialize(std::string word)
+{
+	WordNode* node = new WordNode();
+	node->word = word;
+	networkGraph.push_back(node);
+	std::cout << "added " << word << "\n checking rest of word list...\n";
+	for (auto i = wordList.begin(); i != wordList.end();)
+	{
+		if (friends(*i, word))
+		{
+			std::string friendWord = *i;
+			wordList.erase(i);
+			node->friends.push_back(socialize(friendWord));
+		}
+		else i++;
+	}
+	std::cout << "checking rest of social graph...\n";
+	// grab the rest of the connections
+	for (auto i = networkGraph.begin(); i != networkGraph.end(); i++)
+	{
+		if ((*i)->word == word) continue;
+		if (friends((*i)->word, word))
+			node->friends.push_back(*i);
+	}
+	return node;
+}
+
+void print()
+{
+	for (auto i = networkGraph.begin(); i != networkGraph.end(); i ++)
+	{
+		std::cout << "WORD: "<< (*i)->word << "\nFRIENDS:\n";
+		for (auto j = (*i)->friends.begin(); j != (*i)->friends.end(); j ++)
+			std::cout << "\t" << (*j)->word << "\n";
+	}
 }
