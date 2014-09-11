@@ -7,3 +7,5 @@ If the length of word A is less than -1 of the length of word B, then word A and
 If word A is a friend of word B via removal at position n, then each letter in word B must be contained in word A.
 If word A is a friend of word B via addition at position n, then each letter in word A must be contained in word B.
 If word A is a friend of word B via change at position n, then each letter in word A must be contained in word B except the letter at position n. 
+
+Current algorithm uses O(n^2) completely linking every single friend together. 
