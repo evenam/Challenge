@@ -33,6 +33,7 @@ int main(int argc, char** argv)
 		wordList.push_back(inputWord);
 
 	std::sort(wordList.begin(), wordList.end(), wordCompare);
+	std::cout << "Enter word to generate a social network: ";
 	std::cin >> inputWord;
 	socialNetwork = socialize(inputWord);
 	print();
@@ -77,7 +78,6 @@ WordNode* socialize(std::string word)
 	WordNode* node = new WordNode();
 	node->word = word;
 	networkGraph.push_back(node);
-	std::cout << "added " << word << "\n checking rest of word list...\n";
 	for (auto i = wordList.begin(); i != wordList.end();)
 	{
 		if (friends(*i, word))
@@ -88,7 +88,6 @@ WordNode* socialize(std::string word)
 		}
 		else i++;
 	}
-	std::cout << "checking rest of social graph...\n";
 	// grab the rest of the connections
 	for (auto i = networkGraph.begin(); i != networkGraph.end(); i++)
 	{
